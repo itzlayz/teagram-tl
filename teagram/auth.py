@@ -16,7 +16,7 @@ from qrcode.main import QRCode
 from . import __version__
 
 class Auth:
-    def __init__(self, session_name: str = "../teagram") -> None:
+    def __init__(self, session_name: str = "/teagram") -> None:
         self._check_api_tokens()
 
         config = configparser.ConfigParser()
