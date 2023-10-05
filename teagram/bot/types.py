@@ -45,8 +45,7 @@ class Item:
 
             if not coro:
                 return False
-        else:
-            if update_type.from_user.id != self._manager.me.id:
-                return False
+        elif update_type.from_user.id != self._manager.me.id:
+            return False
 
         return True

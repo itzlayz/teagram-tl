@@ -96,9 +96,7 @@ class ExampleMod(loader.Module):  # Example - название класса мо
     async def example(self, message: types.Message, args: str):
         # args это аргументы команды
         # .example [аргументы]
-        await utils.answer(message, f'Это пример команды' + (
-            args or ""
-        ))
+        await utils.answer(message, ('Это пример команды' + (args or "")))
 
     # Можно сделать команду с помощью окончания _cmd/cmd
     async def example_cmd(self, message: types.Message):

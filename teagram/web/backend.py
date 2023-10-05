@@ -64,7 +64,7 @@ async def proxytunnel():
     await asyncio.wait_for(ev.wait(), 15)
 
     if url:
-        print('To login in account, open in browser {}'.format(str(url)))
+        print('To login in account, open in browser {}'.format(url))
     else:
         print('To login in account, open in browser https://127.0.0.1:8000')
 
@@ -79,7 +79,7 @@ async def home(request: Request):
 @api.post('/tokens')
 async def check_tokens(data: Request):
     data = data.headers
-    
+
     client = TelegramClient('./teagram', data['id'], data['hash'])
     await client.connect()
     config = configparser.ConfigParser()
@@ -92,18 +92,17 @@ async def check_tokens(data: Request):
 
         if not (data['id'] and data['hash']) and not (_id and _hash):
             return 'Enter all api tokens'
-        else:
-            config["telethon"] = {
-                "api_id": data['id'],
-                "api_hash": data['hash']
-            }
-              
-            with open("./config.ini", "w") as file:
-                config.write(file)
+        config["telethon"] = {
+            "api_id": data['id'],
+            "api_hash": data['hash']
+        }
+
+        with open("./config.ini", "w") as file:
+            config.write(file)
 
     login['id'] = data['id'] or _id
     login['hash'] = data['hash'] or _hash
-    
+
     try:
         if await client.get_me():
             print(await client.get_me())
