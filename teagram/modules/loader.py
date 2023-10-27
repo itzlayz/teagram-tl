@@ -373,15 +373,13 @@ class LoaderMod(loader.Module):
         '''Получить список модулей с сайта'''
 
         URL = "http://teagram.ddns.net:5810/allmodules/"
-        BASE_URL = "http://teagram.ddns.net:5810/modules/"
         response = requests.get(URL)
 
         if response.status_code == 200:
             json_data = response.json()
-            modules = ''
-            for module in json_data:
-                modules += f'{BASE_URL}{module}\n'
+            BASE_URL = "http://teagram.ddns.net:5810/modules/"
+            modules = ''.join(f'{BASE_URL}{module}\n' for module in json_data)
             await utils.answer(message,modules)
-        
+
         else:
             print("Error:", response.status_code)
