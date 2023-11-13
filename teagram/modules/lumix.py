@@ -20,10 +20,7 @@ class LumixMod(loader.Module):
         module = self.lookup(module)
         prefix = self.get_prefix()[0]
         return "\n".join(
-            "👉 <code>{}</code> {}".format(
-                prefix + command,
-                f"- <b>{module.command_handlers[command].__doc__}</b>" or ''
-            )
+            f"""👉 <code>{prefix + command}</code> {f"- <b>{module.command_handlers[command].__doc__}</b>" or ''}"""
             for command in module.command_handlers
         )
 

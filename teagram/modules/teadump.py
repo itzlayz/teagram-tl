@@ -30,14 +30,10 @@ def get_git_info(commit: bool=False, url: bool=False, branch: bool=False):
     repo = REPO
 
     if commit:
-        commit = repo.commit()
-        return commit
-    
+        return repo.commit()
     if url:
         origin = repo.remotes.origin
-        origin_url = origin.url
-        return origin_url
-    
+        return origin.url
     if branch:
         return repo.active_branch.name
     
@@ -61,12 +57,8 @@ class DumpMod(loader.Module):
 
     def gen(self) -> dict:
         ver = ""
-        
-        if "windows" in platform.platform():
-            ver = platform.platform()
-        else:
-            ver = get_distro()
 
+        ver = platform.platform() if "windows" in platform.platform() else get_distro()
         return {
             "teagram.token": {
                 "token": get_token()

@@ -70,9 +70,9 @@ class BotManager(Events, TokenManager):
 
 
             self._token = await self._create_bot()
-            if not self._token:
-                logger.error(error_text)
-                sys.exit(1)
+        if not self._token:
+            logger.error(error_text)
+            sys.exit(1)
         if not self._token:
             logging.error(error_text)
             sys.exit(1)
@@ -110,7 +110,7 @@ class BotManager(Events, TokenManager):
 
                     await conv.send_file("assets/teagram_bot.png")
                     await conv.get_response()
-                    
+
                     for message in [
                         "/setinline",
                         f"@{name}",
@@ -128,7 +128,7 @@ class BotManager(Events, TokenManager):
 
         self.me = await self.bot.get_me()
         self.bot_id = self.me.id
-        
+
         self._db.set('teagram.bot', 'token', self._token)
         self._dp = Dispatcher(self.bot)
         self._register_handlers()

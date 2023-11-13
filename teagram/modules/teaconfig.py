@@ -27,11 +27,11 @@ class TeaConfigMod(loader.Module):
     def keywords(self, config, option: str) -> str:
         if not (validator := getattr(config.config[option], 'validator')):
             return ""
-        
+
         if not (keywords := getattr(validator.type, 'keywords', '')):
             return ""
-        
-        keys = [(k, v) for k, v in keywords.items()]
+
+        keys = list(keywords.items())
         text = ", ".join(f'<b>{key[0]}</b> - <code>{key[1]}</code>' for key in keys)
 
         return f"🔎 {text}"
