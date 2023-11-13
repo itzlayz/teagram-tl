@@ -44,7 +44,7 @@ class Utils:
                     if callable(btn['callback']):
                         callback = random_id(20)
                         self._manager.callback_handlers[callback] = btn['callback']
-                        
+
                         if btn.get('args', ''):
                             self.callback_units[callback] = btn['args']
 
@@ -66,24 +66,23 @@ class Utils:
                         keyboard.add(
                             types.InlineKeyboardButton(
                                 btn['text'],
-                                switch_inline_query_current_chat=_id+" "
+                                switch_inline_query_current_chat=f"{_id} ",
+                            )
+                        )
+                    elif btn.get('switch_query'):
+                        keyboard.add(
+                            types.InlineKeyboardButton(
+                                btn['text'],
+                                switch_inline_query=btn['switch_query']
                             )
                         )
                     else:
-                        if not btn.get('switch_query'):
-                            keyboard.add(
-                                types.InlineKeyboardButton(
-                                    btn['text'],
-                                    switch_inline_query_current_chat=btn['input']+" "
-                                )
+                        keyboard.add(
+                            types.InlineKeyboardButton(
+                                btn['text'],
+                                switch_inline_query_current_chat=btn['input']+" "
                             )
-                        else:
-                            keyboard.add(
-                                types.InlineKeyboardButton(
-                                    btn['text'],
-                                    switch_inline_query=btn['switch_query']
-                                )
-                            )
+                        )
                 elif btn.get('url', ''):
                     keyboard.add(
                         types.InlineKeyboardButton(
@@ -114,7 +113,7 @@ class Utils:
                         if callable(button['callback']):
                             callback = random_id(20)
                             self._manager.callback_handlers[callback] = button['callback']
-                        
+
                             if button.get('args', ''):
                                 self.callback_units[callback] = button['args']
 
@@ -132,7 +131,7 @@ class Utils:
                                 'handler': button['handler'],
                                 'args': button['args']
                             }
-                        
+
                             line += [
                                 types.InlineKeyboardButton(
                                     button['text'],
@@ -162,7 +161,7 @@ class Utils:
                         ]
                 except KeyError as e:
                     logger.debug(f"Can't build button: {e}")
-        
+
             keyboard.row(*line)
-        
+
         return keyboard

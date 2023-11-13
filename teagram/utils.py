@@ -392,7 +392,7 @@ async def set_avatar(
 
     await fw_protect()
 
-    try:
+    with contextlib.suppress(Exception):
         await client.delete_messages(
             peer,
             message_ids=[
@@ -403,9 +403,6 @@ async def set_avatar(
                 ).message.id
             ],
         )
-    except Exception:
-        pass
-
     return True
 
 async def answer(
@@ -636,23 +633,21 @@ def get_platform() -> str:
     IS_WSL = 'WSL_DISTRO_NAME' in os.environ
 
     if IS_TERMUX:
-        platform = "📱 Termux"
+        return "📱 Termux"
     elif IS_DOCKER:
-        platform = "🐳 Docker"
+        return "🐳 Docker"
     elif IS_GOORM:
-        platform = "💚 Goorm"
+        return "💚 Goorm"
     elif IS_WSL:
-        platform = "🧱 WSL"
+        return "🧱 WSL"
     elif IS_WIN:
-        platform = "💻 Windows"
+        return "💻 Windows"
     elif IS_CODESPACES:
-        platform = "👨‍💻 Github Codespaces"
+        return "👨‍💻 Github Codespaces"
     elif IS_ZACHOST:
-        platform = "❔ Zachemhost"
+        return "❔ Zachemhost"
     else:
-        platform = "🖥️ VDS"
-    
-    return platform
+        return "🖥️ VDS"
 
 def random_id(length: int = 10) -> str:
     """
@@ -700,11 +695,9 @@ def get_distro() -> str:
     info = result.stdout
 
     pattern = r'Description:\s+(.+)'
-    match = re.search(pattern, info)
-    if match:
-        distro = match.group(1)
-        return distro
-    else:  
+    if match := re.search(pattern, info):
+        return match.group(1)
+    else:
         return
 
 

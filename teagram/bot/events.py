@@ -72,7 +72,7 @@ class Events(Item):
         """
         if call.from_user.id != self._manager.me.id:
            return
-        
+
         call = InlineCall(call, self)
         try:
             if (func := self._units[call.data]):
@@ -83,7 +83,7 @@ class Events(Item):
                         logging.exception(error)
         except KeyError:
             pass
-        
+
         try:
             if (func := self._manager.callback_handlers[call.data]):
                 args = self.callback_units[call.data]
@@ -93,11 +93,10 @@ class Events(Item):
                             await func(call, *args)
                         else:
                             await func(call, args)
-                    else:
-                        if len(inspect.getfullargspec(
+                    elif len(inspect.getfullargspec(
                             func
                         ).args) == 2:
-                            await func(call)
+                        await func(call)
                 except Exception as error:
                     logging.exception(error)
 
@@ -115,11 +114,10 @@ class Events(Item):
                 try:
                     if len(inspect.getfullargspec(func).args) == 2: 
                         await func(call)
-                    else:
-                        if (
+                    elif (
                             args := self.callback_units.get(key, ())
                         ):
-                            await func(call, args)
+                        await func(call, args)
                 except Exception as error:
                     logging.exception(error)
         except RuntimeError:

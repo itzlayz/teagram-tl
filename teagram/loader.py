@@ -612,13 +612,9 @@ class ModulesManager:
         """Finds module by name"""
         if not isinstance(name, str):
             return None
-        
+
         module = next((module for module in self.modules if module.name.lower() in name.lower()), None)
         if not module:
             module = next((module for module in self.modules if name.lower() in module.name.lower()), None)
-            if module:
-                return module
-            
-            return None
-        
+            return module if module else None
         return module
