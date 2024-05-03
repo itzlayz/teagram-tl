@@ -186,7 +186,7 @@ def get_chat_id(message: Message) -> typing.Optional[int]:
     return get_chat(message)
 
 
-def get_topic(message: Message) -> typing.Optional[int]:
+def get_topic(message: Message) -> Union[int, None]:
     """
     Get topic id of message
     :param message: Message to get topic of
@@ -195,7 +195,7 @@ def get_topic(message: Message) -> typing.Optional[int]:
     return (
         (message.reply_to.reply_to_top_id or message.reply_to.reply_to_msg_id)
         if (
-            isinstance(message, Message)
+            isinstance(message, custom.Message)
             or isinstance(message, types.Message)
             or isinstance(message, events.NewMessage.Event)
             and message.reply_to
@@ -227,10 +227,10 @@ def validate(attribute):
     if isinstance(attribute, str):
         try:
             attribute = int(attribute)
-        except:  # noqa: E722
+        except Exception:
             try:
                 attribute = bool(strtobool(attribute))
-            except:  # noqa: E722
+            except Exception:
                 pass
 
     return attribute
@@ -406,11 +406,12 @@ async def create_group(
     description: str,
     megagroup: bool = False,
     broadcast: bool = False,
+    forum: bool = False,
 ):
     await fw_protect()
     return await app(
         CreateChannelRequest(
-            title, description, megagroup=megagroup, broadcast=broadcast
+            title, description, megagroup=megagroup, broadcast=broadcast, forum=forum
         )
     )
 
@@ -453,7 +454,7 @@ async def asset_channel(
     archive: bool = False,
     invite_bot: bool = False,
     avatar: typing.Optional[str] = None,
-    _folder=None,
+    _folder: bool = None,
 ) -> typing.Tuple[Channel, bool]:
     """
     Create new channel (if needed) and return its entity
@@ -658,6 +659,7 @@ async def answer(
     topic: bool = False,
     caption: str = "",
     parse_mode: str = "HTML",
+    reply_markup: dict = None,
     **kwargs,
 ) -> Message:
     """
@@ -670,6 +672,7 @@ async def answer(
     :param topic: Send in topic (bool)
     :param caption: Text under doc/photo
     :param parse_mode: Markdown/HTML
+    :param reply_markup: Inline markup, dict or aiogram types
     :return: `Message`
     """
     if not message:
@@ -720,17 +723,22 @@ async def answer(
                 if message.out:
                     await message.delete()
         else:
-            try:
-                msg = await client.edit_message(
-                    chat, message.id, response, parse_mode=parse_mode, **kwargs
+            if reply_markup:
+                msg = await client.inline.form(
+                    message=message, text=response, reply_markup=reply_markup
                 )
-            except:  # noqa: E722
-                msg = await message.reply(
-                    response,
-                    parse_mode=parse_mode,
-                    reply_to=reply_to,
-                    **kwargs,
-                )
+            else:
+                try:
+                    msg = await client.edit_message(
+                        chat, message.id, response, parse_mode=parse_mode, **kwargs
+                    )
+                except Exception:
+                    msg = await message.reply(
+                        response,
+                        parse_mode=parse_mode,
+                        reply_to=reply_to,
+                        **kwargs,
+                    )
 
     if photo or document:
         msg = await client.send_file(
@@ -810,7 +818,7 @@ def get_ram() -> float:
         for child in process.children(recursive=True):
             mem += child.memory_info()[0] / 2.0**20
         return round(mem, 1)
-    except:  # noqa: E722
+    except Exception:
         return 0
 
 
@@ -832,7 +840,7 @@ def get_cpu() -> float:
             cpu += child.cpu_percent()
 
         return cpu
-    except:  # noqa: E722
+    except Exception:
         return 0
 
 
