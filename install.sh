@@ -18,7 +18,7 @@ if [[ "$teagram" == "reset" ]]; then
 fi
 
 PYTHON=""
-for ver in python3.11 python3.10 python3.9 python3; do
+for ver in python3.11 python3.10 python3.9 python 3.8 python3; do
     if command -v "$ver" &>/dev/null; then
         PYTHON="$ver"
         break
@@ -31,9 +31,9 @@ if [ -z "$PYTHON" ]; then
     eval "$SUDOCMD $PKGINSTALL git openssl python3"
 else
     ver=$(echo "$($PYTHON --version 2>&1 | awk '{print $2}' | cut -d. -f1,2)" | tr -d '.')
-    if [[ -z "$ver" || "$ver" -lt "309" ]]; then
-        echo "[ERROR] Your python version must be higher than 3.9" >> "$LOG_FILE"
-        echo "[ERROR] Your python version must be higher than 3.9"
+    if [[ -z "$ver" || "$ver" -lt "308" ]]; then
+        echo "[ERROR] Your python version must be higher than 3.8" >> "$LOG_FILE"
+        echo "[ERROR] Your python version must be higher than 3.8"
         exit 1
     fi
 

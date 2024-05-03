@@ -11,7 +11,7 @@
 
 > ⚠ You need api_id and api_hash to run. You can get them at <a href="https://my.telegram.org">my.telegram.org</a> <br>
 > Please, consider reading https://core.telegram.org/api/terms for more information. <br>
-> Needs python 3.9+
+> Needs python 3.8+
 
 You can install it via scripts like <a href="https://github.com/itzlayz/teagram-tl/blob/main/main.sh">main.sh</a> or manual: <br>
 ```bash

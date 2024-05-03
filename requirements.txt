@@ -12,4 +12,4 @@ fastapi==0.101.1
 uvicorn==0.23.2
 jinja2
 
-# python>=3.9
+# python>=3.8
