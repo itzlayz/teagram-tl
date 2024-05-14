@@ -74,7 +74,10 @@ class InlineCall(CallbackQuery):
         CallbackQuery.__init__(self)
         self.inline_message_id = None
         self.callback_query = call
+
         self._bot = manager.bot
+        self._client = manager._app
+
         self.chat = getattr(call.message, "chat", None)
         self.chat_id = getattr(self.chat, "id", None)
 
@@ -118,7 +121,7 @@ class InlineCall(CallbackQuery):
                     media = aiotypes.InputMediaAnimation(
                         photo, caption=text, parse_mode="html", has_spoiler=spoiler
                     )
-            except:  # noqa: E722
+            except Exception:
                 logger.exception("Can't delete inline call")
                 return
 

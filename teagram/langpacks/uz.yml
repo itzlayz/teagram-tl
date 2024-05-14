@@ -143,7 +143,8 @@ settings:
   chbot: "<b>✔ Siz muvaffaqiyatli inline botni o'zgartirdingiz!\nO'zgartirish uchun qayta ishlang (<code>{}</code>)</b>"
   iname_ch: "<b>Siz muvaffaqiyatli <code>{cur}</code> bot nomini <code>{last}</code> dan <code>{cur}</code> ga o'zgartirdingiz</b>"
   noargs: "<emoji document_id=5210952531676504517>❌</emoji> <b>Argumentlar mavjud emas</b>"
-
+  ibot_ch: "<b>✅ Bot muvaffaqiyatli o'zgartirildi, o'zgarishlar uchun qayta ishlang</b>"
+  invalid_bot: "<emoji document_id=5210952531676504517>❌</emoji><b>Noto'g'ri bot nomi</b>"
 
 dump:
   dumped: "Dump yaratildi"

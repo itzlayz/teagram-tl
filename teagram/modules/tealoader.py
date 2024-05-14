@@ -22,13 +22,8 @@ import requests
 
 from telethon import types
 from telethon.tl.custom import Message
-from .. import loader, utils
 
-VALID_URL = r"[-[\]_.~:/?#@!$&'()*+,;%<=>a-zA-Z0-9]+"
-VALID_PIP_PACKAGES = re.compile(
-    r"^\s*# required:(?: ?)((?:{url} )*(?:{url}))\s*$".format(url=VALID_URL),
-    re.MULTILINE,
-)
+from .. import loader, utils
 
 GIT_REGEX = re.compile(
     r"^https?://github\.com((?:/[a-z0-9-]+){2})(?:/tree/([a-z0-9-]+)((?:/[a-z0-9-]+)*))?/?$",
@@ -96,7 +91,8 @@ class LoaderMod(loader.Module):
     async def decline_load(self, call):
         await call.edit("✅", self.inline._generate_markup([]))
 
-    async def repo_cmd(self, message: types.Message, args: str):
+    @loader.command()
+    async def repo(self, message: types.Message, args: str):
         """Установить репозиторий с модулями. Использование: repo <ссылка на репозиторий или reset>"""
         if not args:
             return await utils.answer(message, self.strings["noargs"])
@@ -113,7 +109,8 @@ class LoaderMod(loader.Module):
         self.db.set("teagram.loader", "repo", args)
         return await utils.answer(message, self.strings["yesurl"])
 
-    async def dlrepo_cmd(self, message: types.Message, args: str):
+    @loader.command()
+    async def dlrepo(self, message: types.Message, args: str):
         """Загрузить модуль по ссылке. Использование: dlrepo <ссылка или all или ничего>"""
         modules_repo = self.db.get(
             "teagram.loader", "repo", "https://github.com/itzlayz/teagram-modules"
@@ -269,7 +266,8 @@ class LoaderMod(loader.Module):
             traceback.print_exc()
             await utils.answer(message, f"❌ <code>{error}</code>")
 
-    async def loadmod_cmd(self, message: Message):
+    @loader.command()
+    async def loadmod(self, message: Message):
         """Загрузить модуль по файлу. Использование: <реплай на файл>"""
         reply: Message = await message.get_reply_message()
         file = (
@@ -392,13 +390,14 @@ class LoaderMod(loader.Module):
             + self.strings["replytoload"].format(self.prefix[0]),
         )
 
-    async def restart_cmd(self, message: types.Message):
+    @loader.command()
+    async def restart(self, message: types.Message):
         """Перезагрузка юзербота"""
 
-        def restart() -> None:
+        def _restart() -> None:
             os.execl(sys.executable, sys.executable, "-m", "teagram")
 
-        atexit.register(restart)
+        atexit.register(_restart)
         self.db.set(
             "teagram.loader",
             "restart",

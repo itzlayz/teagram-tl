@@ -172,7 +172,8 @@ def get_command_handlers(instance: Module) -> Dict[str, FunctionType]:
         method = getattr(instance, method_name)
 
         if callable(method) and (
-            method_name.endswith("_cmd") or method_name.endswith("cmd")
+            method_name.endswith("_cmd") or method_name.endswith("cmd") or
+            hasattr(method, "is_command")
         ):
             if method_name.endswith("_cmd"):
                 command_name = method_name[:-4].lower()

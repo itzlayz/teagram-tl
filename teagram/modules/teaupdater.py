@@ -141,7 +141,8 @@ class UpdateMod(loader.Module):
                 me.id, f'{self.strings["eone"]}\n' f'{self.strings["etwo"]} {error}'
             )
 
-    async def update_cmd(self, message: types.Message):
+    @loader.command()
+    async def update(self, message: types.Message):
         if no_git:
             return await utils.answer(
                 message,
@@ -174,7 +175,7 @@ class UpdateMod(loader.Module):
                         ],
                         check=True,
                     )
-                except:  # noqa: E722
+                except Exception:
                     pass
 
             def restart() -> None:

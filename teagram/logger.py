@@ -4,6 +4,15 @@ import asyncio
 from typing import List
 from . import utils
 
+EMOJIS = {
+    "NOTSET": "🤷 <b>NOTSET</b>",
+    "DEBUG": "🐞 <b>DEBUG</b>",
+    "INFO": "❔ <b>INFO</b>",
+    "WARNING": "⚠️ <b>WARNING</b>",
+    "ERROR": "🚨 <b>ERROR</b>",
+    "CRITICAL": "💥 <b>CRITICAL</b>",
+}
+
 
 class TeagramLogs(logging.StreamHandler):
     def __init__(self, *args, **kwargs):
@@ -45,17 +54,9 @@ class TeagramLogs(logging.StreamHandler):
             return
 
         if getattr(self, "client", None):
-            emojis = {
-                "DEBUG": "🐞 <b>DEBUG</b>",
-                "INFO": "❔ <b>INFO</b>",
-                "WARNING": "⚠️ <b>WARNING</b>",
-                "ERROR": "🚨 <b>ERROR</b>",
-                "CRITICAL": "💥 <b>CRITICAL</b>",
-            }
-
             await self.client.inline_bot.send_message(
                 await self.client.logchat,
-                f"{emojis[record.levelname]}:\n" f"<code>{self.format(record)}</code>",
+                f"{EMOJIS[record.levelname]}:\n" f"<code>{self.format(record)}</code>",
                 parse_mode="html",
             )
 

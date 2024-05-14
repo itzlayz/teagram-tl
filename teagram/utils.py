@@ -170,20 +170,22 @@ def sublist(_list: list, row_length: int = 3) -> list:
 
 
 def get_chat(message: Message) -> typing.Optional[int]:
+    """Short func for get_chat_id"""
+    return get_chat_id(message)
+
+
+def get_chat_id(message: Message) -> typing.Optional[int]:
     """
     Get chat id of message
     :param message: Message to get chat of
     :return: int or None if not present
     """
-    return message.chat.id if message.chat else message._chat_peer
 
-
-def get_chat_id(message: Message) -> typing.Optional[int]:
-    """
-    Same as get_chat
-    """
-
-    return get_chat(message)
+    return (
+        message.chat.id
+        if message.chat
+        else getattr(message, "_chat_peer", message.chat_instance)
+    )
 
 
 def get_topic(message: Message) -> Union[int, None]:

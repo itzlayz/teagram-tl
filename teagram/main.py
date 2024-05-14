@@ -74,7 +74,7 @@ class Main:
         try:
             if os.geteuid() == 0 and "docker" not in utils.get_platform().lower():
                 self.log.warning("Please do not use root for userbot")
-        except:  # noqa: E722
+        except Exception:
             pass
 
         app = auth.Auth(manual=False).app
@@ -174,7 +174,7 @@ class Main:
                     await app.edit_message(
                         _id[0], _id[1], restarted_text, parse_mode="html"
                     )
-            except:  # noqa: E722
+            except Exception:
                 await self.on_start(bot, self.db, prefix, app)
 
             self.db.pop("teagram.loader", "restart")

@@ -216,7 +216,7 @@ class Config(dict):
             super().__setitem__(key, self.config[key].value)
 
 
-class CustomHTMLParser(HTMLToTelegramParser):  # noqa: F811
+class CustomHTMLParser(HTMLToTelegramParser):
     """telethon.extensions.html with premium emojis"""
 
     def __init__(self, *args):

@@ -14,7 +14,6 @@ import time
 
 from .. import __version__, loader, utils, validators
 from ..types import Config, ConfigValue
-from ..bot import BotManager
 
 from telethon.tl.custom import Message
 from datetime import timedelta

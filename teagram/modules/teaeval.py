@@ -46,6 +46,7 @@ class EvalMod(loader.Module):
     """Используйте eval прямо через 🍵teagram!"""
 
     async def e_cmd(self, message: types.Message, args: str):
+        reply = await message.get_reply_message()
         result = await execute_python_code(
             args,
             {
@@ -59,7 +60,8 @@ class EvalMod(loader.Module):
                 "loader": loader,
                 "telethon": __import__("telethon"),
                 "message": message,
-                "reply": await message.get_reply_message(),
+                "reply": reply,
+                "r": reply,
                 "args": args,
                 "me": self.manager.me,
                 "c": self.client,
@@ -69,7 +71,7 @@ class EvalMod(loader.Module):
         if getattr(result, "stringify", ""):
             try:
                 result = str(result.stringify())
-            except:  # noqa: E722
+            except Exception:
                 pass
 
         await utils.answer(

@@ -141,6 +141,8 @@ settings:
   chbot: "<b>✔ Du hast den Inline-Bot erfolgreich geändert!\nBitte starte den Bot neu, um die Änderungen zu übernehmen (<code>{}</code>)</b>"
   iname_ch: "<b>Sie haben erfolgreich den Namen des Bots von <code>{last}</code> auf <code>{cur}</code> geändert</b>"
   noargs: "<emoji document_id=5210952531676504517>❌</emoji> <b>Keine Argumente</b>"
+  ibot_ch: "<b>✅ Bot erfolgreich geändert, bitte für Änderungen neu starten</b>"
+  invalid_bot: "<emoji document_id=5210952531676504517>❌</emoji><b>Ungültiger Benutzername des Bots</b>"
 
 dump:
   dumped: "Dump erstellt"

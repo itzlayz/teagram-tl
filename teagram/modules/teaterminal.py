@@ -19,7 +19,8 @@ class TerminalMod(loader.Module):
 
     strings = {"name": "terminal"}
 
-    async def terminal_cmd(self, message: types.Message, args: str):
+    @loader.command()
+    async def terminal(self, message: types.Message, args: str):
         """Use terminal"""
         await utils.answer(message, "☕")
 

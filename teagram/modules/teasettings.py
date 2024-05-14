@@ -12,7 +12,9 @@
 import time
 import io
 import os
+
 import logging
+import asyncio
 
 from logging import _nameToLevel, _levelToName
 from datetime import timedelta
@@ -113,7 +115,8 @@ class SettingsMod(loader.Module):
     async def error(self, message):
         raise TestException("Test exception")
 
-    async def setprefix_cmd(self, message: types.Message, args: str):
+    @loader.command()
+    async def setprefix(self, message: types.Message, args: str):
         """Изменить префикс, можно несколько штук разделённые пробелом. Использование: setprefix <префикс> [префикс, ...]"""
         args = args.split()
         if not args:
@@ -123,7 +126,8 @@ class SettingsMod(loader.Module):
         prefixes = ", ".join(f"<code>{prefix}</code>" for prefix in args)
         await utils.answer(message, self.strings["prefix"].format(prefixes=prefixes))
 
-    async def setlang_cmd(self, message: types.Message, args: str):
+    @loader.command()
+    async def setlang(self, message: types.Message, args: str):
         """Изменить язык. Использование: setlang <язык>"""
         args = args.split()
 
@@ -150,7 +154,8 @@ class SettingsMod(loader.Module):
             message, self.strings["lang"].format(language=language)
         )
 
-    async def addalias_cmd(self, message: types.Message, args: str):
+    @loader.command()
+    async def addalias(self, message: types.Message, args: str):
         """Добавить алиас. Использование: addalias <новый алиас> <команда>"""
         args = args.lower().split(maxsplit=1)
         if not args:
@@ -173,7 +178,8 @@ class SettingsMod(loader.Module):
             message, self.strings["alias"].format(alias=args[0], cmd=args[1])
         )
 
-    async def delalias_cmd(self, message: types.Message, args: str):
+    @loader.command()
+    async def delalias(self, message: types.Message, args: str):
         """Удалить алиас. Использование: delalias <алиас>"""
         args = args.split()
         if not args:
@@ -188,7 +194,8 @@ class SettingsMod(loader.Module):
 
         return await utils.answer(message, self.strings["dalias"].format(args))
 
-    async def aliases_cmd(self, message: types.Message):
+    @loader.command()
+    async def aliases(self, message: types.Message):
         """Показать все алиасы"""
         if aliases := self.manager.aliases:
             return await utils.answer(
@@ -202,7 +209,8 @@ class SettingsMod(loader.Module):
         else:
             return await utils.answer(message, self.strings["noalias"])
 
-    async def ping_cmd(self, message: types.Message):
+    @loader.command()
+    async def ping(self, message: types.Message):
         """🍵 команда для просмотра пинга."""
         start = time.perf_counter_ns()
         client: TelegramClient = message._client
@@ -297,3 +305,55 @@ class SettingsMod(loader.Module):
             message,
             self.strings("iname_ch").format(last=self.inline.bot_username, cur=args),
         )
+
+    @loader.command(alias="ch_inline_bot")
+    async def inlinebot(self, message, args: str):
+        if not args:
+            return await utils.answer(message, self.strings("noargs"))
+
+        if not args.startswith("@") or not args.lower().endswith("bot"):
+            return await utils.answer(
+                message,
+                self.strings("invalid_bot"),
+            )
+
+        async with self.client.conversation("@BotFather") as conv:
+            await conv.send_message("/mybots")
+            response = await conv.get_response()
+
+            if not response.reply_markup:
+                return await utils.answer(
+                    message,
+                    self.strings("unexpected_error").format(response.text),
+                )
+
+            for row in response.reply_markup.rows:
+                for button in row.buttons:
+                    if button.text == args:
+                        break
+            else:
+                await conv.send_message("/token")
+                await asyncio.sleep(1)
+
+                await conv.send_message(args)
+                await asyncio.sleep(1)
+
+                from re import search
+
+                response = await conv.get_response()
+
+                token = search(r"\d{1,}:[0-9a-zA-Z_-]{35}", response.text)
+                if not token:
+                    return await utils.answer(
+                        message,
+                        self.strings("unexpected_error").format(response.text),
+                    )
+                else:
+                    token = token.group(0)
+
+                self.db.set("teagram.bot", "token", token.strip())
+                await utils.answer(message, self.strings("ibot_ch"))
+
+                return
+
+        await utils.answer(message, "wth")

@@ -42,7 +42,7 @@ class HelpMod(loader.Module):
         """Список всех модулей"""
         try:
             self.bot_username = f"@{self.inline.bot_username}"
-        except:  # noqa: E722
+        except Exception:
             self.bot_username = self.strings["ebot"]
 
         if not args:

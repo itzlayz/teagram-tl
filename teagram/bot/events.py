@@ -115,7 +115,7 @@ class Events(Item):
             return call
         except KeyError:
             pass
-        except:  # noqa: E722
+        except Exception:
             traceback.print_exc()
 
         try:
@@ -133,7 +133,6 @@ class Events(Item):
                         else:
                             args += func.args
 
-                        print("ARGS: ", args)
                         await func.func(call, *args)
                     else:
                         if len(inspect.getfullargspec(func).args) == 2:

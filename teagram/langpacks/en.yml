@@ -142,6 +142,9 @@ settings:
   chbot: "<b>✔ You succesfully changed inline bot!\nRestart for changes (<code>{}</code>)</b>"
   iname_ch: "<b>You succesfully changed <code>{cur}</code> bot's name from <code>{last}</code> to <code>{cur}</code></b>"
   noargs: "<emoji document_id=5210952531676504517>❌</emoji> <b>No arguments</b>"
+  unexpected_error: "<emoji document_id=5210952531676504517>❌</emoji> <b>Unexpected error: <code>{}</code>, please contact developers</b>"
+  ibot_ch: "<b>✅ Successfuly changed bot, please restart for changes</b>"
+  invalid_bot: "<emoji document_id=5210952531676504517>❌</emoji><b>Invalid bot's username</b>"
 
 dump:
   dumped: "Dump created"
